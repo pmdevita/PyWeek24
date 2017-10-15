@@ -19,3 +19,4 @@ class Board:
         self._r_y = round(height / 2) + self.y
         for i in self._sprites:
             i._resize()
+
