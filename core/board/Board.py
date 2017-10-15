@@ -15,7 +15,7 @@ class Board:
 
 
     def _resize(self, width, height):
-        self._r_x = round(wh[0] / 2) + self.x
-        self._r_y = round(wh[1] / 2) + self.y
+        self._r_x = round(width / 2) + self.x
+        self._r_y = round(height / 2) + self.y
         for i in self._sprites:
             i._resize()
