@@ -14,7 +14,6 @@ class Window(pyglet.window.Window):
     def on_resize(self, width, height):
         self.dispatch_event("resize", width, height)
         super(Window, self).on_resize(width, height)
-        print("resize!", width, height)
 
     def on_draw(self):
         self.clear()

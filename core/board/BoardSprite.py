@@ -1,24 +1,16 @@
 import pyglet
 
-def _anchor_coords(a, img):
-    if a == "center":
-        img.anchor_x, img.anchor_y = round(img.width/2), round(img.height/2)
-
-
 class BoardSprite(pyglet.sprite.Sprite):
-    def __init__(self, board, image, x, y, anchor=None, *args, **kwargs):
+    def __init__(self, board, image, x, y, *args, **kwargs):
         self._board = board
         board._sprites.append(self)
-
-        if anchor:
-            _anchor_coords(anchor, image)
 
         self._v_x = x
         self._v_y = y
         self._init_coords()
 
-        super(BoardSprite, self).__init__(image, self._x, self._y, *args, **kwargs)
-        
+        super(BoardSprite, self).__init__(image, self._x, self._y, *args, **kwargs,
+                                          batch=board._batch)
 
 
     def _init_coords(self):
