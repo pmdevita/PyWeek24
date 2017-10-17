@@ -1,7 +1,6 @@
 import pyglet
 import core
 
-
 class Window(pyglet.window.Window):
     def __init__(self, wh):
         super(Window, self).__init__(resizable=True, width=wh[0], height=wh[1])
