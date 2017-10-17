@@ -1,2 +1,3 @@
-import core.board
-import core.image
+import core.lib
+
+from core.Board import Board
