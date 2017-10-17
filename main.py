@@ -4,16 +4,22 @@ import core
 class Window(pyglet.window.Window):
     def __init__(self, wh):
         super(Window, self).__init__(resizable=True, width=wh[0], height=wh[1])
-        self.reg_events()
         self.batch = pyglet.graphics.Batch()
-        self.board = core.board.Board(self, self.batch, wh)
+        self.board = core.Board(self, self.batch, wh)
 
-    def reg_events(self):
-        self.register_event_type("resize")
+        self.input = core.lib.Input(self)
 
-    def on_resize(self, width, height):
-        self.dispatch_event("resize", width, height)
-        super(Window, self).on_resize(width, height)
+        self.input.register_hold([pyglet.window.key.UP, pyglet.window.key.DOWN, pyglet.window.key.RIGHT, pyglet.window.key.LEFT], self.key)
+
+    def key(self, key, frames):
+        if key == pyglet.window.key.UP:
+            self.board.y = self.board.y + frames
+        elif key == pyglet.window.key.DOWN:
+            self.board.y = self.board.y - frames
+        elif key == pyglet.window.key.LEFT:
+            self.board.x = self.board.x - frames
+        elif key == pyglet.window.key.RIGHT:
+            self.board.x = self.board.x + frames
 
     def on_draw(self):
         self.clear()
