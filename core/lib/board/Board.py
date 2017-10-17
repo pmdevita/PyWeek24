@@ -3,7 +3,7 @@ class Board:
     # from center
     def __init__(self, window, batch, wh, x=0, y=0, scale=1):
         self.window = window
-        self.scale = scale
+        self._scale = scale
         # Coordinates of board from center of the window
         self._x = x
         self._y = y
@@ -42,7 +42,7 @@ class Board:
             self._y = y
             self._r_y = self._c_y + self._y
         if scale:
-            self.scale = scale
+            self._scale = scale
         self._update_board()
 
     @property
@@ -73,3 +73,15 @@ class Board:
         self._r_y = self._c_y + self._y
         self._update_board()
 
+    @property
+    def scale(self):
+        """X coordinate of the sprite.
+
+        :type: int
+        """
+        return self._scale
+
+    @scale.setter
+    def scale(self, scale):
+        self._scale = max(scale, 0)
+        self._update_board()
