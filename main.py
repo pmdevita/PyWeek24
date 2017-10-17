@@ -11,7 +11,7 @@ class Window(pyglet.window.Window):
 
         self.input.register_hold([pyglet.window.key.UP, pyglet.window.key.DOWN, pyglet.window.key.RIGHT, pyglet.window.key.LEFT], self.key)
 
-
+        
     def key(self, key, frames):
         if key == pyglet.window.key.UP:
             self.board.y = self.board.y + frames

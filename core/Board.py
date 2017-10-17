@@ -6,4 +6,3 @@ class Board(B):
     def __init__(self, window, batch, wh):
         super(Board, self).__init__(window, batch, wh)
 
-
