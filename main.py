@@ -11,6 +11,8 @@ class Window(pyglet.window.Window):
 
         self.input.register_hold([pyglet.window.key.UP, pyglet.window.key.DOWN, pyglet.window.key.RIGHT, pyglet.window.key.LEFT], self.key)
 
+        pyglet.clock.schedule_interval(self.scaletest, 2)
+
     def key(self, key, frames):
         if key == pyglet.window.key.UP:
             self.board.y = self.board.y + frames
@@ -24,6 +26,21 @@ class Window(pyglet.window.Window):
     def on_draw(self):
         self.clear()
         self.batch.draw()
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        print("hold")
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        print("release")
+
+    def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
+        self.board.scale = self.board.scale - (scroll_y / 2)
+
+    def scaletest(self, dt):
+        if self.board.scale == 1:
+            self.board.scale = 2
+        else:
+            self.board.scale = 1
 
 if __name__ == "__main__":
     w = Window((640,480))

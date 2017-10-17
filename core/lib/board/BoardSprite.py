@@ -7,13 +7,15 @@ import pyglet
 
 
 class BoardSprite(pyglet.sprite.Sprite):
-    def __init__(self, board, image, x, y, *args, **kwargs):
+    def __init__(self, board, image, x, y, scale=1, *args, **kwargs):
         self._board = board
         board._sprites.append(self)
 
+        # virtual geometry
         self._v_x = x
         self._v_y = y
-        self._v_scale = 1
+        self._v_scale = scale
+        self._scale = self._v_scale * self._board._scale
 
         super(BoardSprite, self).__init__(image, self._board._r_x + self._v_x, self._board._r_y + self._v_y,
                                           *args, **kwargs, batch=board._batch)
@@ -22,16 +24,17 @@ class BoardSprite(pyglet.sprite.Sprite):
         """
         Modified from pyglet source to use virtual coords
         """
+        if scale is not None:
+            self._v_scale = scale
+            self._scale = self._v_scale * self._board._scale
         if x is not None:
             self._v_x = x
-            self._x = self._board._r_x + self._v_x
+            self._x = self._board._r_x + (self._v_x * self._board._scale)
         if y is not None:
             self._v_y = y
-            self._y = self._board._r_y + self._v_y
+            self._y = self._board._r_y + (self._v_y * self._board._scale)
         if rotation is not None:
             self._rotation = rotation
-        if scale is not None:
-            self._scale = scale
         if scale_x is not None:
             self._scale_x = scale_x
         if scale_y is not None:
@@ -40,8 +43,9 @@ class BoardSprite(pyglet.sprite.Sprite):
 
 
     def _update(self):
-        self._x = self._board._r_x + self._v_x
-        self._y = self._board._r_y + self._v_y
+        self._x = self._board._r_x + (self._v_x * self._board._scale)
+        self._y = self._board._r_y + (self._v_y * self._board._scale)
+        self._scale = self._scale = self._v_scale * self._board._scale
         self._update_position()
 
     @property
@@ -74,3 +78,17 @@ class BoardSprite(pyglet.sprite.Sprite):
 
     def __del__(self):
         self._board._sprites.remove(self)
+
+    @property
+    def scale(self):
+        """X coordinate of the sprite.
+
+        :type: int
+        """
+        return self._v_scale
+
+    @scale.setter
+    def scale(self, scale):
+        self._v_scale = scale
+        self._scale = self._v_scale * self._board._scale
+        self._update_board()
