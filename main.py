@@ -11,7 +11,7 @@ class Window(pyglet.window.Window):
 
         self.input.register_hold([pyglet.window.key.UP, pyglet.window.key.DOWN, pyglet.window.key.RIGHT, pyglet.window.key.LEFT], self.key)
 
-        
+
     def key(self, key, frames):
         if key == pyglet.window.key.UP:
             self.board.y = self.board.y + frames
@@ -30,5 +30,8 @@ class Window(pyglet.window.Window):
         self.board.scale = self.board.scale - (scroll_y / 3)
 
 if __name__ == "__main__":
+    pyglet.resource.path = ["resources/images", "resources/audio"]
+    pyglet.resource.reindex()
+
     w = Window((640,480))
     pyglet.app.run()
