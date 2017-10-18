@@ -83,5 +83,5 @@ class Board:
 
     @scale.setter
     def scale(self, scale):
-        self._scale = max(scale, 0)
+        self._scale = max(scale, 0.001)
         self._update_board()

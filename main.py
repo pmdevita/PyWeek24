@@ -30,5 +30,8 @@ class Window(pyglet.window.Window):
         self.board.scale = self.board.scale - (scroll_y / 3)
 
 if __name__ == "__main__":
+    pyglet.resource.path = ["resources/images", "resources/audio"]
+    pyglet.resource.reindex()
+
     w = Window((640,480))
     pyglet.app.run()
