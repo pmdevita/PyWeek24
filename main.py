@@ -33,5 +33,5 @@ if __name__ == "__main__":
     pyglet.resource.path = ["resources/images", "resources/audio"]
     pyglet.resource.reindex()
 
-    w = Window((640,480))
+    w = Window((1280,720))
     pyglet.app.run()
