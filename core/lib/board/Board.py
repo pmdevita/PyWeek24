@@ -17,8 +17,6 @@ class Board:
         self._batch = batch
         self._sprites = []
 
-
-
         self.window.push_handlers(on_resize=self._resize)
 
 
@@ -56,7 +54,7 @@ class Board:
     @x.setter
     def x(self, x):
         self._x = x
-        self._r_x = self._c_x + self._x
+        self._r_x = self._c_x + (self._x * self._scale)
         self._update_board()
 
     @property
@@ -70,7 +68,7 @@ class Board:
     @y.setter
     def y(self, y):
         self._y = y
-        self._r_y = self._c_y + self._y
+        self._r_y = self._c_y + (self._y * self._scale)
         self._update_board()
 
     @property
@@ -84,4 +82,6 @@ class Board:
     @scale.setter
     def scale(self, scale):
         self._scale = max(scale, 0.001)
+        self._r_x = self._c_x + (self._x * self._scale)
+        self._r_y = self._c_y + (self._y * self._scale)
         self._update_board()
