@@ -3,7 +3,13 @@ class Board:
     # from center
     def __init__(self, window, batch, wh, x=0, y=0, scale=1):
         self.window = window
-        self._scale = scale
+        # scale is all real numbers which is then converted to the actual scale %
+        self._scale_int = scale
+        if self._scale_int < 1:
+            self._scale = 1 / (-self._scale_int + 3) * 2
+        else:
+            self._scale = self._scale_int
+
         # Coordinates of board from center of the window
         self._x = x
         self._y = y
@@ -11,20 +17,26 @@ class Board:
         self._c_x = round(wh[0] / 2)
         self._c_y = round(wh[1] / 2)
         # Actual coordinates of board
-        self._r_x = self._c_x + self._x
-        self._r_y = self._c_y + self._y
+        self._update_r_x()
+        self._update_r_y()
 
         self._batch = batch
         self._sprites = []
 
         self.window.push_handlers(on_resize=self._resize)
 
+    def _update_r_x(self):
+        self._r_x = self._c_x + (self._x * self._scale)
+
+    def _update_r_y(self):
+        self._r_y = self._c_y + (self._y * self._scale)
+
 
     def _resize(self, width, height):
         self._c_x = round(width / 2)
         self._c_y = round(height / 2)
-        self._r_x = self._c_x + self._x
-        self._r_y = self._c_y + self._y
+        self._update_r_x()
+        self._update_r_y()
         self._update_board()
 
     def _update_board(self):
@@ -32,15 +44,19 @@ class Board:
             i._update()
 
     # Allow the programmer to update multiple values at once
-    def update(self, x=None, y=None, scale=None):
+    def update(self, x=None, y=None, scale_int=None):
+        if scale_int:
+            self._scale_int += scale_int
+            if self._scale_int < 1:
+                self._scale = 1 / (-self._scale_int + 3) * 2
+            else:
+                self._scale = self._scale_int
         if x:
             self._x = x
-            self._r_x = self._c_x + self._x
+            self._update_r_x()
         if y:
             self._y = y
-            self._r_y = self._c_y + self._y
-        if scale:
-            self._scale = scale
+            self._update_r_y()
         self._update_board()
 
     @property
@@ -54,7 +70,7 @@ class Board:
     @x.setter
     def x(self, x):
         self._x = x
-        self._r_x = self._c_x + (self._x * self._scale)
+        self._update_r_x()
         self._update_board()
 
     @property
@@ -68,7 +84,7 @@ class Board:
     @y.setter
     def y(self, y):
         self._y = y
-        self._r_y = self._c_y + (self._y * self._scale)
+        self._update_r_y()
         self._update_board()
 
     @property
@@ -79,9 +95,28 @@ class Board:
         """
         return self._scale
 
+    # @scale.setter
+    # def scale(self, scale):
+    #     self._scale = scale
+    #     self._r_x = self._c_x + (self._x * self._scale)
+    #     self._r_y = self._c_y + (self._y * self._scale)
+    #     self._update_board()
+
+    @property
+    def scale_int(self):
+        """X coordinate of the sprite.
+
+        :type: int
+        """
+        return self._scale_int
+
     @scale.setter
-    def scale(self, scale):
-        self._scale = max(scale, 0.001)
+    def scale_int(self, scale):
+        self._scale_int += scale
+        if self._scale_int < 1:
+            self._scale = 1 / (-self._scale_int + 2)
+        else:
+            self._scale = self._scale_int
         self._r_x = self._c_x + (self._x * self._scale)
         self._r_y = self._c_y + (self._y * self._scale)
         self._update_board()
