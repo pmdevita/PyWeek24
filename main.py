@@ -6,14 +6,21 @@ class Window(pyglet.window.Window):
         super(Window, self).__init__(resizable=True, width=wh[0], height=wh[1])
         self.batch = pyglet.graphics.Batch()
         self.board = core.Board(self, self.batch, wh)
-
+        self.collisions = core.mouse.Collisions(self, self.board._sprites)
         self.input = core.lib.Input(self)
 
-        # self.input.register_hold([pyglet.window.key.UP, pyglet.window.key.DOWN, pyglet.window.key.RIGHT, pyglet.window.key.LEFT], self.key)
+        self.input.register_hold([pyglet.window.key.UP, pyglet.window.key.DOWN, pyglet.window.key.RIGHT, pyglet.window.key.LEFT], self.key)
+        self.input.register_press(pyglet.window.key.F11, self.f_fullscreen)
 
         self.scroll_directions = [0,0]
         self.autoscroll = False
         self.active = True
+
+    def f_fullscreen(self, key, modifiers):
+        if self.fullscreen:
+            self.set_fullscreen(False)
+        else:
+            self.set_fullscreen(True)
 
     def key(self, key, frames):
         if key == pyglet.window.key.UP:
@@ -59,7 +66,6 @@ class Window(pyglet.window.Window):
         else:
             self.scroll_directions[1] = 0
 
-
         if autoscroll:
             self.mouse_xy = (x, y)
             if not self.autoscroll:
@@ -82,7 +88,7 @@ class Window(pyglet.window.Window):
         self.batch.draw()
 
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
-        print(scroll_y / 3.5, self.board.scale_int / 2 * (-1 if scroll_y < 0 else 1))
+        # print(scroll_y / 3.5, self.board.scale_int / 2 * (-1 if scroll_y < 0 else 1))
         self.board.scale_int = self.board.scale_int / 2 * (-1 if scroll_y < 0 else 1)
         # print(self.board.scale)
 

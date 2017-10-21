@@ -37,11 +37,15 @@ class Board:
         self._c_y = round(height / 2)
         self._update_r_x()
         self._update_r_y()
-        self._update_board()
+        self._resize_board()
 
-    def _update_board(self):
+    def _resize_board(self):
         for i in self._sprites:
-            i._update()
+            i._resize()
+
+    def _pan_board(self):
+        for i in self._sprites:
+            i._pan()
 
     # Allow the programmer to update multiple values at once
     def update(self, x=None, y=None, scale_int=None):
@@ -57,7 +61,7 @@ class Board:
         if y:
             self._y = y
             self._update_r_y()
-        self._update_board()
+        self._resize_board()
 
     @property
     def x(self):
@@ -71,7 +75,7 @@ class Board:
     def x(self, x):
         self._x = x
         self._update_r_x()
-        self._update_board()
+        self._pan_board()
 
     @property
     def y(self):
@@ -85,7 +89,7 @@ class Board:
     def y(self, y):
         self._y = y
         self._update_r_y()
-        self._update_board()
+        self._pan_board()
 
     @property
     def scale(self):
@@ -119,4 +123,4 @@ class Board:
             self._scale = self._scale_int
         self._r_x = self._c_x + (self._x * self._scale)
         self._r_y = self._c_y + (self._y * self._scale)
-        self._update_board()
+        self._resize_board()

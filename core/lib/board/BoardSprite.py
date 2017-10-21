@@ -17,8 +17,16 @@ class BoardSprite(pyglet.sprite.Sprite):
         self._v_scale = scale
         self._scale = self._v_scale * self._board._scale
 
+        self._wh = (image.width, image.height)
+
         super(BoardSprite, self).__init__(image, self._board._r_x + self._v_x, self._board._r_y + self._v_y,
                                           *args, **kwargs, batch=board._batch)
+
+        self._calc_bounds()
+
+    def _calc_bounds(self):
+        self._bounds = (self._wh[0] * self._scale, self._wh[1] * self._scale)
+        # print("{} bounds ({}, {}) at coords ({}, {})".format(self.__class__.__name__, self._bounds[0], self._bounds[1], self._x, self._y))
 
     def update(self, x=None, y=None, rotation=None, scale=None, scale_x=None, scale_y=None):
         """
@@ -41,12 +49,21 @@ class BoardSprite(pyglet.sprite.Sprite):
             self._scale_y = scale_y
         self._update_position()
 
+    def collision(self, collider):
+        pass
 
-    def _update(self):
+    def _resize(self):
+        self._scale = self._scale = self._v_scale * self._board._scale
         self._x = self._board._r_x + (self._v_x * self._board._scale)
         self._y = self._board._r_y + (self._v_y * self._board._scale)
-        self._scale = self._scale = self._v_scale * self._board._scale
+        self._calc_bounds()
         self._update_position()
+
+    def _pan(self):
+        self._x = self._board._r_x + (self._v_x * self._board._scale)
+        self._y = self._board._r_y + (self._v_y * self._board._scale)
+        self._update_position()
+
 
     @property
     def x(self):
